@@ -1,21 +1,28 @@
 const shortid = require("shortid");
 const URL = require("../models/url");
 
-// This syntax is used to handle the POST request to generate a new short URL
+
+
 async function handleGenerateNewShortURL(req, res) {
   const body = req.body;
   if (!body.url) return res.status(400).json({ error: "url is required" });
 
-  const shortID = shortid(); // Generates a random unique ID
-
+  const shortID = shortid();
   await URL.create({
     shortId: shortID,
     redirectURL: body.url,
     visitHistory: [],
   });
 
-  return res.json({ id: shortID });
+  // Instead of res.json, we now render the home page and pass the new ID back
+  return res.render("home", {
+    id: shortID,
+  });
 }
+
+// ... analytics function remains the same ...
+
+
 
 // This syntax is used to fetch visit history and click counts
 async function handleGetAnalytics(req, res) {

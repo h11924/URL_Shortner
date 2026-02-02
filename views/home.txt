@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+Meaning: These are standard HTML tags that set up the document structure and the main heading you see at the top of the page.
+
+<% if (locals.id) { %>
+    <p>URL Generated: http://localhost:8001/<%= id %></p>
+<% } %>
+<% if (locals.id) { %>: The <% ... %> tag runs JavaScript logic without displaying it. This line checks if the server sent back a new id after shortening a link.
+
+<%= id %>: The <%= ... %> tag outputs a value. It prints the actual short ID on the screen.
+
+<% } %>: Closes the "if" statement. If there is no ID (like when you first open the page), this whole section is invisible.
+
+<div>
+    <form method="POST" action="/url">
+        <label>Enter Your Original URL</label>
+        <input type="text" name="url" placeholder="https://example.com" />
+        <button type="submit">Generate</button>
+    </form>
+</div>
+method="POST": Tells the browser to "send data" to the server securely.
+
+action="/url": Tells the browser exactly where to send that data (the /url route in your index.js).
+
+name="url": This is the most important part! It gives the input a name so that in your backend, you can grab it using req.body.url.
+
+
+% if (locals.urls) { %>
+    <table>
+        <thead>
+            <th>S. No</th>
+            <th>ShortID</th>
+            <th>Redirect</th>
+            <th>Clicks</th>
+        </thead>
+        <tbody>
+            <% urls.forEach((url, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= url.shortId %></td>
+                    <td><%= url.redirectURL %></td>
+                    <td><%= url.visitHistory.length %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } %>
+<% if (locals.urls) { %>: Checks if the server provided a list of all URLs from the database.
+
+<% urls.forEach((url, index) => { %>: This is a JavaScript loop. For every single URL entry in your database, it will "draw" one new row (<tr>) in your table.
+
+<%= index + 1 %>: Shows the row number (1, 2, 3...).
+
+<%= url.visitHistory.length %>: This is how we show the total clicks. It counts how many items are inside the visitHistory array.
+
